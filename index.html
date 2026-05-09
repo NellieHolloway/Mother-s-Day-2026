@@ -103,7 +103,6 @@
     height: 100%;
     transform-style: preserve-3d;
   }
-
   .back-leaf { transform: translateZ(-1px); }
 
   .front-leaf {
@@ -247,7 +246,7 @@
     width: 80%; max-width: 200px; opacity: 0.65;
   }
 
-  /* ============ INSIDE RIGHT — DECORATING GAME ============ */
+  /* INSIDE RIGHT — DECORATING GAME */
   .inside-right {
     background:
       linear-gradient(-90deg, rgba(58,40,32,0.04) 0%, transparent 8%),
@@ -267,7 +266,6 @@
     font-size: 11px; color: var(--ink-soft); margin: 1px 0 0;
   }
 
-  /* Scene where the room gets decorated */
   .room-scene {
     width: 100%;
     aspect-ratio: 320 / 200;
@@ -294,23 +292,19 @@
     0%, 100% { opacity: 0.25; }
     50% { opacity: 0.6; }
   }
-
-  /* Active slot has a subtle glow */
   .slot.active .slot-placeholder {
-    stroke: var(--terracotta-deep);
+    stroke: #9a4a32;
     opacity: 0.8;
     stroke-width: 1.5;
   }
 
-  /* Item drop-in animation */
-  .item-in {
-    animation: itemDrop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-    transform-origin: center;
-    transform-box: fill-box;
-  }
-  @keyframes itemDrop {
-    0% { opacity: 0; transform: translateY(-12px) scale(0.6); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+  /* Option groups inside slots: hidden until chosen, visible when given .show class */
+  .opt-group { display: none; }
+  .opt-group.show { display: inline; }
+  .opt-group.show { animation: fadeIn 0.45s ease-out; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .round-prompt {
@@ -373,7 +367,6 @@
     letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1px;
   }
 
-  /* Final state: replaces options with a "done" message */
   .done-msg {
     text-align: center;
     padding: 12px 8px;
@@ -511,15 +504,6 @@
   .replay-btn:hover { background: var(--terracotta-deep); }
   .replay-btn:active { transform: translateY(1px); }
 
-  .floating {
-    position: fixed; pointer-events: none; z-index: 100;
-    font-size: 16px; animation: floatUp 1.6s ease-out forwards;
-  }
-  @keyframes floatUp {
-    0% { opacity: 1; transform: translate(-50%, 0) scale(0.6); }
-    100% { opacity: 0; transform: translate(-50%, -70px) scale(1.2); }
-  }
-
   .confetti {
     position: fixed; width: 8px; height: 12px;
     top: -20px; pointer-events: none; z-index: 100;
@@ -570,10 +554,8 @@
           <div class="room-scene">
             <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" id="roomSvg">
 
-              <!-- baseboard -->
               <rect x="0" y="128" width="320" height="3" fill="#9a4a32" opacity="0.4"/>
 
-              <!-- window with leaves -->
               <g transform="translate(14 18)">
                 <rect width="64" height="74" fill="#a5c4a0" stroke="#8a6428" stroke-width="2"/>
                 <ellipse cx="14" cy="20" rx="9" ry="5" fill="#54664c" transform="rotate(-15 14 20)"/>
@@ -583,36 +565,102 @@
                 <ellipse cx="30" cy="68" rx="7" ry="4" fill="#54664c"/>
                 <line x1="32" y1="0" x2="32" y2="74" stroke="#8a6428" stroke-width="1.5"/>
                 <line x1="0" y1="37" x2="64" y2="37" stroke="#8a6428" stroke-width="1.5"/>
-                <!-- sill -->
                 <rect x="-3" y="92" width="70" height="3" fill="#8a6428"/>
               </g>
 
-              <!-- art slot (above sofa, on wall) -->
+              <!-- ART SLOT (above sofa, on wall) -->
               <g id="slot-art" class="slot" transform="translate(170 22)">
                 <rect class="slot-placeholder" width="80" height="55" rx="2"/>
+                <g class="opt-group" data-idx="0">
+                  <rect x="0" y="0" width="80" height="55" fill="#b88a3e" stroke="#8a6428" stroke-width="1.5"/>
+                  <rect x="4" y="4" width="72" height="47" fill="#fbf3df"/>
+                  <rect x="8" y="8" width="64" height="39" fill="#d98e7a"/>
+                  <circle cx="58" cy="22" r="6" fill="#b88a3e"/>
+                  <path d="M8 47 L22 30 L32 36 L42 24 L52 32 L72 38 L72 47 Z" fill="#54664c"/>
+                  <path d="M8 47 L24 36 L34 40 L46 30 L56 36 L72 40 L72 47 Z" fill="#7a8c6f"/>
+                  <circle cx="4" cy="4" r="1.5" fill="#d4a85e"/>
+                  <circle cx="76" cy="4" r="1.5" fill="#d4a85e"/>
+                  <circle cx="4" cy="51" r="1.5" fill="#d4a85e"/>
+                  <circle cx="76" cy="51" r="1.5" fill="#d4a85e"/>
+                </g>
+                <g class="opt-group" data-idx="1">
+                  <rect x="0" y="0" width="80" height="55" fill="#3a2820" stroke="#5e3a28" stroke-width="1.5"/>
+                  <rect x="4" y="4" width="72" height="47" fill="#fbf3df"/>
+                  <circle cx="24" cy="22" r="14" fill="#c0664a"/>
+                  <circle cx="48" cy="32" r="11" fill="#7a8c6f"/>
+                  <circle cx="60" cy="16" r="6" fill="#b88a3e"/>
+                  <path d="M8 40 Q30 36 60 44" stroke="#3a2820" stroke-width="0.8" fill="none"/>
+                  <circle cx="4" cy="4" r="1.5" fill="#d4a85e"/>
+                  <circle cx="76" cy="4" r="1.5" fill="#d4a85e"/>
+                  <circle cx="4" cy="51" r="1.5" fill="#d4a85e"/>
+                  <circle cx="76" cy="51" r="1.5" fill="#d4a85e"/>
+                </g>
+                <g class="opt-group" data-idx="2">
+                  <rect x="0" y="0" width="80" height="55" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/>
+                  <rect x="4" y="4" width="72" height="47" fill="#fbf3df"/>
+                  <path d="M40 45 Q40 30 40 12" stroke="#54664c" stroke-width="0.8" fill="none"/>
+                  <ellipse cx="32" cy="22" rx="9" ry="5" fill="#7a8c6f" transform="rotate(-30 32 22)"/>
+                  <ellipse cx="48" cy="22" rx="9" ry="5" fill="#7a8c6f" transform="rotate(30 48 22)"/>
+                  <ellipse cx="30" cy="35" rx="7" ry="4" fill="#54664c" transform="rotate(-40 30 35)"/>
+                  <ellipse cx="50" cy="35" rx="7" ry="4" fill="#54664c" transform="rotate(40 50 35)"/>
+                  <circle cx="40" cy="14" r="5" fill="#d98e7a"/>
+                  <circle cx="40" cy="14" r="2" fill="#b88a3e"/>
+                  <circle cx="4" cy="4" r="1.5" fill="#d4a85e"/>
+                  <circle cx="76" cy="4" r="1.5" fill="#d4a85e"/>
+                  <circle cx="4" cy="51" r="1.5" fill="#d4a85e"/>
+                  <circle cx="76" cy="51" r="1.5" fill="#d4a85e"/>
+                </g>
               </g>
 
               <!-- sofa -->
               <g>
-                <!-- back cushion -->
                 <rect x="125" y="92" width="135" height="32" rx="4" fill="#9a4a32"/>
                 <line x1="170" y1="96" x2="170" y2="120" stroke="#3a2820" stroke-width="0.5" opacity="0.4"/>
                 <line x1="215" y1="96" x2="215" y2="120" stroke="#3a2820" stroke-width="0.5" opacity="0.4"/>
-                <!-- seat -->
                 <rect x="125" y="116" width="135" height="20" rx="3" fill="#c0664a"/>
                 <line x1="170" y1="118" x2="170" y2="134" stroke="#9a4a32" stroke-width="0.5"/>
                 <line x1="215" y1="118" x2="215" y2="134" stroke="#9a4a32" stroke-width="0.5"/>
-                <!-- arm rests -->
                 <rect x="118" y="98" width="12" height="40" rx="3" fill="#9a4a32"/>
                 <rect x="255" y="98" width="12" height="40" rx="3" fill="#9a4a32"/>
-                <!-- legs -->
                 <rect x="122" y="136" width="5" height="6" fill="#3a2820"/>
                 <rect x="258" y="136" width="5" height="6" fill="#3a2820"/>
               </g>
 
-              <!-- pillow slot (on sofa, right side) -->
+              <!-- PILLOW SLOT (on sofa, right side) -->
               <g id="slot-pillow" class="slot" transform="translate(225 100)">
                 <rect class="slot-placeholder" width="32" height="22" rx="3"/>
+                <g class="opt-group" data-idx="0">
+                  <rect x="0" y="0" width="32" height="22" rx="3" fill="#d98e7a" stroke="#9a4a32" stroke-width="0.7"/>
+                  <circle cx="2" cy="2" r="1.4" fill="#b88a3e"/>
+                  <circle cx="30" cy="2" r="1.4" fill="#b88a3e"/>
+                  <circle cx="2" cy="20" r="1.4" fill="#b88a3e"/>
+                  <circle cx="30" cy="20" r="1.4" fill="#b88a3e"/>
+                  <path d="M6 11 Q16 7 26 11" stroke="#9a4a32" stroke-width="0.4" fill="none" opacity="0.6"/>
+                </g>
+                <g class="opt-group" data-idx="1">
+                  <rect x="0" y="0" width="32" height="22" rx="3" fill="#b88a3e" stroke="#8a6428" stroke-width="0.7"/>
+                  <g transform="translate(10 11)">
+                    <circle cx="0" cy="-3" r="2" fill="#fbf3df"/>
+                    <circle cx="3" cy="-1" r="2" fill="#fbf3df"/>
+                    <circle cx="2" cy="3" r="2" fill="#fbf3df"/>
+                    <circle cx="-2" cy="3" r="2" fill="#fbf3df"/>
+                    <circle cx="-3" cy="-1" r="2" fill="#fbf3df"/>
+                    <circle cx="0" cy="0" r="1.2" fill="#9a4a32"/>
+                  </g>
+                  <g transform="translate(22 11)">
+                    <circle cx="0" cy="-3" r="2" fill="#fbf3df"/>
+                    <circle cx="3" cy="-1" r="2" fill="#fbf3df"/>
+                    <circle cx="2" cy="3" r="2" fill="#fbf3df"/>
+                    <circle cx="-2" cy="3" r="2" fill="#fbf3df"/>
+                    <circle cx="-3" cy="-1" r="2" fill="#fbf3df"/>
+                    <circle cx="0" cy="0" r="1.2" fill="#9a4a32"/>
+                  </g>
+                </g>
+                <g class="opt-group" data-idx="2">
+                  <rect x="0" y="0" width="32" height="22" rx="3" fill="#7a8c6f" stroke="#54664c" stroke-width="0.7"/>
+                  <path d="M16 4 L22 11 L16 18 L10 11 Z" fill="none" stroke="#fbf3df" stroke-width="0.8" opacity="0.8"/>
+                  <path d="M3 11 L9 11 M22 11 L29 11" stroke="#fbf3df" stroke-width="0.8" opacity="0.8"/>
+                </g>
               </g>
 
               <!-- side table -->
@@ -623,12 +671,37 @@
                 <rect x="307" y="138" width="3" height="6" fill="#5e3a28"/>
               </g>
 
-              <!-- plant slot (on side table) -->
+              <!-- PLANT SLOT (on side table) -->
               <g id="slot-plant" class="slot" transform="translate(280 70)">
                 <rect class="slot-placeholder" width="30" height="38" rx="2"/>
+                <g class="opt-group" data-idx="0">
+                  <path d="M3 26 L27 26 L25 38 L5 38 Z" fill="#c0664a" stroke="#9a4a32" stroke-width="0.7"/>
+                  <ellipse cx="15" cy="26" rx="11" ry="1.5" fill="#9a4a32"/>
+                  <path d="M11 18 Q3 12 5 4 Q9 7 11 12 Q12 7 15 8 Q13 14 11 18" fill="#54664c"/>
+                  <path d="M19 18 Q27 12 25 4 Q21 7 19 12 Q18 7 15 8 Q17 14 19 18" fill="#7a8c6f"/>
+                  <path d="M15 8 Q15 2 15 6" stroke="#54664c" stroke-width="0.8"/>
+                </g>
+                <g class="opt-group" data-idx="1">
+                  <path d="M3 26 L27 26 L25 38 L5 38 Z" fill="#7a8c6f" stroke="#54664c" stroke-width="0.7"/>
+                  <ellipse cx="15" cy="26" rx="11" ry="1.5" fill="#54664c"/>
+                  <path d="M15 26 Q11 17 7 6" stroke="#54664c" stroke-width="0.8" fill="none"/>
+                  <path d="M15 26 Q15 14 15 2" stroke="#54664c" stroke-width="0.8" fill="none"/>
+                  <path d="M15 26 Q19 17 23 6" stroke="#54664c" stroke-width="0.8" fill="none"/>
+                  <path d="M11 18 Q8 18 7 16 M13 13 Q10 13 9 11 M14 8 Q11 8 10 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+                  <path d="M15 18 Q12 18 11 16 M15 13 Q12 13 11 11 M15 8 Q12 8 11 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+                  <path d="M15 18 Q18 18 19 16 M15 13 Q18 13 19 11 M15 8 Q18 8 19 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+                  <path d="M19 18 Q22 18 23 16 M17 13 Q20 13 21 11 M16 8 Q19 8 20 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+                </g>
+                <g class="opt-group" data-idx="2">
+                  <path d="M3 26 L27 26 L25 38 L5 38 Z" fill="#b88a3e" stroke="#8a6428" stroke-width="0.7"/>
+                  <ellipse cx="15" cy="26" rx="11" ry="1.5" fill="#8a6428"/>
+                  <path d="M12 26 Q11 16 12 4 Q13 3 14 4 Q15 16 14 26 Z" fill="#54664c"/>
+                  <path d="M15 26 Q16 18 17 8 Q18 7 19 8 Q18 18 17 26 Z" fill="#7a8c6f"/>
+                  <path d="M9 26 Q7 18 5 10 Q6 9 8 10 Q10 18 11 26 Z" fill="#54664c"/>
+                </g>
               </g>
 
-              <!-- ORANGUTAN sitting on sofa, left side -->
+              <!-- ORANGUTAN -->
               <g transform="translate(150 100)">
                 <ellipse cx="0" cy="22" rx="18" ry="14" fill="#c0664a"/>
                 <ellipse cx="-12" cy="30" rx="6" ry="10" fill="#9a4a32"/>
@@ -644,9 +717,27 @@
                 <path d="M-3 4 Q0 6 3 4" stroke="#3a2820" stroke-width="0.9" fill="none" stroke-linecap="round"/>
               </g>
 
-              <!-- rug slot (on floor, in front of sofa) -->
+              <!-- RUG SLOT (on floor, in front of sofa) -->
               <g id="slot-rug" class="slot" transform="translate(80 145)">
                 <ellipse class="slot-placeholder" cx="80" cy="14" rx="78" ry="13"/>
+                <g class="opt-group" data-idx="0">
+                  <ellipse cx="80" cy="14" rx="78" ry="13" fill="#7a8c6f" stroke="#54664c" stroke-width="1"/>
+                  <ellipse cx="80" cy="14" rx="60" ry="9" fill="none" stroke="#54664c" stroke-width="0.6" opacity="0.6"/>
+                  <ellipse cx="80" cy="14" rx="36" ry="6" fill="#54664c" opacity="0.3"/>
+                </g>
+                <g class="opt-group" data-idx="1">
+                  <ellipse cx="80" cy="14" rx="78" ry="13" fill="#c0664a" stroke="#9a4a32" stroke-width="1"/>
+                  <line x1="6" y1="9" x2="154" y2="9" stroke="#fbf3df" stroke-width="1.4" opacity="0.7"/>
+                  <line x1="6" y1="14" x2="154" y2="14" stroke="#fbf3df" stroke-width="1.4" opacity="0.7"/>
+                  <line x1="6" y1="19" x2="154" y2="19" stroke="#fbf3df" stroke-width="1.4" opacity="0.7"/>
+                </g>
+                <g class="opt-group" data-idx="2">
+                  <ellipse cx="80" cy="14" rx="78" ry="13" fill="#f5e8c7" stroke="#b88a3e" stroke-width="1"/>
+                  <circle cx="50" cy="14" r="3.5" fill="none" stroke="#b88a3e" stroke-width="0.8"/>
+                  <circle cx="80" cy="14" r="4.5" fill="none" stroke="#b88a3e" stroke-width="0.8"/>
+                  <circle cx="110" cy="14" r="3.5" fill="none" stroke="#b88a3e" stroke-width="0.8"/>
+                  <path d="M14 14 Q80 4 146 14 Q80 24 14 14 Z" fill="none" stroke="#b88a3e" stroke-width="0.5" opacity="0.5"/>
+                </g>
               </g>
 
             </svg>
@@ -681,9 +772,9 @@
             <!--   Use <br> for line breaks, <br><br> for blank line. -->
             <!-- ════════════════════════════════════════════════════ -->
             <div class="note-text" id="note">
-              Mom — thank you for being great<br>
-              I didn't get you an Orangutan but I hope this card will suffice.<br><br>
-              Happy Mother's Day!
+              Mom — thank you for making every place<br>
+              I've ever lived feel like home.<br><br>
+              I love you. Happy Mother's Day.
             </div>
             <!-- ════════════════════════════════════════════════════ -->
             <!--   ⬆ END OF PERSONAL MESSAGE ⬆                       -->
@@ -769,7 +860,7 @@
             <em>You taught me that.</em> In every room<br>
             of mine, I see the reason why.
           </p>
-          <p class="poem-author">— :)</p>
+          <p class="poem-author">— for you, with love</p>
           <svg class="botanical" viewBox="0 0 220 60" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 30 Q60 10 110 30 Q160 50 210 30" stroke="#7a8c6f" stroke-width="1.5" fill="none"/>
             <g transform="translate(40 22)">
@@ -799,15 +890,9 @@
 
 <script>
 // =========================================================================
-//   THE 4 ROUNDS — each a category with 3 options the player chooses from
+//   ROUND DATA — only thumbnails + facts now; scene SVG is inlined in HTML
 // =========================================================================
-// Each option has TWO svg fragments:
-//   - thumb: standalone <svg> for the option button (100x100 viewBox)
-//   - scene: inner SVG content placed inside the slot in the room scene
-//            (positioned for the slot's transform origin at top-left)
-
-const ROUNDS = [
-  // ----------------------- RUG -----------------------
+var ROUNDS = [
   {
     key: 'rug',
     slotId: 'slot-rug',
@@ -815,25 +900,11 @@ const ROUNDS = [
     factTitle: 'The Rug',
     fact: "Orangutan moms line the bottom of every nest with extra leaves — a literal foundation layer. A rug, basically.",
     options: [
-      {
-        name: 'sage oval',
-        thumb: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="42" ry="28" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><ellipse cx="50" cy="50" rx="32" ry="20" fill="none" stroke="#54664c" stroke-width="1" opacity="0.6"/><ellipse cx="50" cy="50" rx="20" ry="12" fill="#54664c" opacity="0.3"/></svg>`,
-        scene: `<ellipse cx="80" cy="14" rx="78" ry="13" fill="#7a8c6f" stroke="#54664c" stroke-width="1"/><ellipse cx="80" cy="14" rx="60" ry="9" fill="none" stroke="#54664c" stroke-width="0.6" opacity="0.6"/><ellipse cx="80" cy="14" rx="36" ry="6" fill="#54664c" opacity="0.3"/>`
-      },
-      {
-        name: 'terracotta stripes',
-        thumb: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="42" ry="28" fill="#c0664a" stroke="#9a4a32" stroke-width="1.5"/><line x1="14" y1="40" x2="86" y2="40" stroke="#fbf3df" stroke-width="2" opacity="0.7"/><line x1="14" y1="50" x2="86" y2="50" stroke="#fbf3df" stroke-width="2" opacity="0.7"/><line x1="14" y1="60" x2="86" y2="60" stroke="#fbf3df" stroke-width="2" opacity="0.7"/></svg>`,
-        scene: `<ellipse cx="80" cy="14" rx="78" ry="13" fill="#c0664a" stroke="#9a4a32" stroke-width="1"/><line x1="6" y1="9" x2="154" y2="9" stroke="#fbf3df" stroke-width="1.4" opacity="0.7"/><line x1="6" y1="14" x2="154" y2="14" stroke="#fbf3df" stroke-width="1.4" opacity="0.7"/><line x1="6" y1="19" x2="154" y2="19" stroke="#fbf3df" stroke-width="1.4" opacity="0.7"/>`
-      },
-      {
-        name: 'cream pattern',
-        thumb: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="42" ry="28" fill="#f5e8c7" stroke="#b88a3e" stroke-width="1.5"/><circle cx="35" cy="50" r="5" fill="none" stroke="#b88a3e" stroke-width="1"/><circle cx="50" cy="50" r="7" fill="none" stroke="#b88a3e" stroke-width="1"/><circle cx="65" cy="50" r="5" fill="none" stroke="#b88a3e" stroke-width="1"/><path d="M22 50 Q50 30 78 50 Q50 70 22 50 Z" fill="none" stroke="#b88a3e" stroke-width="0.7" opacity="0.5"/></svg>`,
-        scene: `<ellipse cx="80" cy="14" rx="78" ry="13" fill="#f5e8c7" stroke="#b88a3e" stroke-width="1"/><circle cx="50" cy="14" r="3.5" fill="none" stroke="#b88a3e" stroke-width="0.8"/><circle cx="80" cy="14" r="4.5" fill="none" stroke="#b88a3e" stroke-width="0.8"/><circle cx="110" cy="14" r="3.5" fill="none" stroke="#b88a3e" stroke-width="0.8"/><path d="M14 14 Q80 4 146 14 Q80 24 14 14 Z" fill="none" stroke="#b88a3e" stroke-width="0.5" opacity="0.5"/>`
-      }
+      { name: 'sage oval', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="50" rx="42" ry="28" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><ellipse cx="50" cy="50" rx="32" ry="20" fill="none" stroke="#54664c" stroke-width="1" opacity="0.6"/><ellipse cx="50" cy="50" rx="20" ry="12" fill="#54664c" opacity="0.3"/></svg>' },
+      { name: 'terracotta stripes', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="50" rx="42" ry="28" fill="#c0664a" stroke="#9a4a32" stroke-width="1.5"/><line x1="14" y1="40" x2="86" y2="40" stroke="#fbf3df" stroke-width="2" opacity="0.7"/><line x1="14" y1="50" x2="86" y2="50" stroke="#fbf3df" stroke-width="2" opacity="0.7"/><line x1="14" y1="60" x2="86" y2="60" stroke="#fbf3df" stroke-width="2" opacity="0.7"/></svg>' },
+      { name: 'cream pattern', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="50" rx="42" ry="28" fill="#f5e8c7" stroke="#b88a3e" stroke-width="1.5"/><circle cx="35" cy="50" r="5" fill="none" stroke="#b88a3e" stroke-width="1"/><circle cx="50" cy="50" r="7" fill="none" stroke="#b88a3e" stroke-width="1"/><circle cx="65" cy="50" r="5" fill="none" stroke="#b88a3e" stroke-width="1"/><path d="M22 50 Q50 30 78 50 Q50 70 22 50 Z" fill="none" stroke="#b88a3e" stroke-width="0.7" opacity="0.5"/></svg>' }
     ]
   },
-
-  // ----------------------- PILLOW -----------------------
   {
     key: 'pillow',
     slotId: 'slot-pillow',
@@ -841,25 +912,11 @@ const ROUNDS = [
     factTitle: 'The Pillow',
     fact: "On rainy nights, an orangutan folds extra leaves into a softer top layer — the world's first throw pillow.",
     options: [
-      {
-        name: 'rose tassels',
-        thumb: `<svg viewBox="0 0 100 100"><rect x="18" y="28" width="64" height="44" rx="7" fill="#d98e7a" stroke="#9a4a32" stroke-width="1.5"/><circle cx="22" cy="32" r="3" fill="#b88a3e"/><circle cx="78" cy="32" r="3" fill="#b88a3e"/><circle cx="22" cy="68" r="3" fill="#b88a3e"/><circle cx="78" cy="68" r="3" fill="#b88a3e"/><path d="M30 50 Q50 42 70 50" stroke="#9a4a32" stroke-width="1" fill="none" opacity="0.6"/></svg>`,
-        scene: `<rect x="0" y="0" width="32" height="22" rx="3" fill="#d98e7a" stroke="#9a4a32" stroke-width="0.7"/><circle cx="2" cy="2" r="1.4" fill="#b88a3e"/><circle cx="30" cy="2" r="1.4" fill="#b88a3e"/><circle cx="2" cy="20" r="1.4" fill="#b88a3e"/><circle cx="30" cy="20" r="1.4" fill="#b88a3e"/><path d="M6 11 Q16 7 26 11" stroke="#9a4a32" stroke-width="0.4" fill="none" opacity="0.6"/>`
-      },
-      {
-        name: 'gold floral',
-        thumb: `<svg viewBox="0 0 100 100"><rect x="18" y="28" width="64" height="44" rx="7" fill="#b88a3e" stroke="#8a6428" stroke-width="1.5"/><g transform="translate(35 50)"><circle cx="0" cy="-7" r="4" fill="#fbf3df"/><circle cx="6" cy="-2" r="4" fill="#fbf3df"/><circle cx="4" cy="5" r="4" fill="#fbf3df"/><circle cx="-4" cy="5" r="4" fill="#fbf3df"/><circle cx="-6" cy="-2" r="4" fill="#fbf3df"/><circle cx="0" cy="0" r="2.5" fill="#9a4a32"/></g><g transform="translate(65 50)"><circle cx="0" cy="-7" r="4" fill="#fbf3df"/><circle cx="6" cy="-2" r="4" fill="#fbf3df"/><circle cx="4" cy="5" r="4" fill="#fbf3df"/><circle cx="-4" cy="5" r="4" fill="#fbf3df"/><circle cx="-6" cy="-2" r="4" fill="#fbf3df"/><circle cx="0" cy="0" r="2.5" fill="#9a4a32"/></g></svg>`,
-        scene: `<rect x="0" y="0" width="32" height="22" rx="3" fill="#b88a3e" stroke="#8a6428" stroke-width="0.7"/><g transform="translate(10 11)"><circle cx="0" cy="-3" r="2" fill="#fbf3df"/><circle cx="3" cy="-1" r="2" fill="#fbf3df"/><circle cx="2" cy="3" r="2" fill="#fbf3df"/><circle cx="-2" cy="3" r="2" fill="#fbf3df"/><circle cx="-3" cy="-1" r="2" fill="#fbf3df"/><circle cx="0" cy="0" r="1.2" fill="#9a4a32"/></g><g transform="translate(22 11)"><circle cx="0" cy="-3" r="2" fill="#fbf3df"/><circle cx="3" cy="-1" r="2" fill="#fbf3df"/><circle cx="2" cy="3" r="2" fill="#fbf3df"/><circle cx="-2" cy="3" r="2" fill="#fbf3df"/><circle cx="-3" cy="-1" r="2" fill="#fbf3df"/><circle cx="0" cy="0" r="1.2" fill="#9a4a32"/></g>`
-      },
-      {
-        name: 'sage diamond',
-        thumb: `<svg viewBox="0 0 100 100"><rect x="18" y="28" width="64" height="44" rx="7" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><path d="M50 35 L60 50 L50 65 L40 50 Z" fill="none" stroke="#fbf3df" stroke-width="1.5" opacity="0.8"/><path d="M30 50 L40 50 M60 50 L70 50" stroke="#fbf3df" stroke-width="1.5" opacity="0.8"/></svg>`,
-        scene: `<rect x="0" y="0" width="32" height="22" rx="3" fill="#7a8c6f" stroke="#54664c" stroke-width="0.7"/><path d="M16 4 L22 11 L16 18 L10 11 Z" fill="none" stroke="#fbf3df" stroke-width="0.8" opacity="0.8"/><path d="M3 11 L9 11 M22 11 L29 11" stroke="#fbf3df" stroke-width="0.8" opacity="0.8"/>`
-      }
+      { name: 'rose tassels', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="28" width="64" height="44" rx="7" fill="#d98e7a" stroke="#9a4a32" stroke-width="1.5"/><circle cx="22" cy="32" r="3" fill="#b88a3e"/><circle cx="78" cy="32" r="3" fill="#b88a3e"/><circle cx="22" cy="68" r="3" fill="#b88a3e"/><circle cx="78" cy="68" r="3" fill="#b88a3e"/><path d="M30 50 Q50 42 70 50" stroke="#9a4a32" stroke-width="1" fill="none" opacity="0.6"/></svg>' },
+      { name: 'gold floral', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="28" width="64" height="44" rx="7" fill="#b88a3e" stroke="#8a6428" stroke-width="1.5"/><g transform="translate(35 50)"><circle cx="0" cy="-7" r="4" fill="#fbf3df"/><circle cx="6" cy="-2" r="4" fill="#fbf3df"/><circle cx="4" cy="5" r="4" fill="#fbf3df"/><circle cx="-4" cy="5" r="4" fill="#fbf3df"/><circle cx="-6" cy="-2" r="4" fill="#fbf3df"/><circle cx="0" cy="0" r="2.5" fill="#9a4a32"/></g><g transform="translate(65 50)"><circle cx="0" cy="-7" r="4" fill="#fbf3df"/><circle cx="6" cy="-2" r="4" fill="#fbf3df"/><circle cx="4" cy="5" r="4" fill="#fbf3df"/><circle cx="-4" cy="5" r="4" fill="#fbf3df"/><circle cx="-6" cy="-2" r="4" fill="#fbf3df"/><circle cx="0" cy="0" r="2.5" fill="#9a4a32"/></g></svg>' },
+      { name: 'sage diamond', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="28" width="64" height="44" rx="7" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><path d="M50 35 L60 50 L50 65 L40 50 Z" fill="none" stroke="#fbf3df" stroke-width="1.5" opacity="0.8"/><path d="M30 50 L40 50 M60 50 L70 50" stroke="#fbf3df" stroke-width="1.5" opacity="0.8"/></svg>' }
     ]
   },
-
-  // ----------------------- PLANT -----------------------
   {
     key: 'plant',
     slotId: 'slot-plant',
@@ -867,25 +924,11 @@ const ROUNDS = [
     factTitle: 'The Plant',
     fact: "Orangutans pick a nest tree like anyone picks a houseplant — sturdy branches, the right height, a view they can stand for one good night.",
     options: [
-      {
-        name: 'monstera',
-        thumb: `<svg viewBox="0 0 100 100"><path d="M30 70 L70 70 L66 95 L34 95 Z" fill="#c0664a" stroke="#9a4a32" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="20" ry="3" fill="#9a4a32"/><path d="M40 50 Q22 40 26 22 Q35 28 38 38 Q42 28 50 30 Q44 42 40 50" fill="#54664c"/><path d="M58 50 Q76 40 72 22 Q63 28 60 38 Q56 28 50 30 Q56 42 58 50" fill="#7a8c6f"/><path d="M50 32 Q50 18 50 28" stroke="#54664c" stroke-width="2"/></svg>`,
-        scene: `<path d="M3 26 L27 26 L25 38 L5 38 Z" fill="#c0664a" stroke="#9a4a32" stroke-width="0.7"/><ellipse cx="15" cy="26" rx="11" ry="1.5" fill="#9a4a32"/><path d="M11 18 Q3 12 5 4 Q9 7 11 12 Q12 7 15 8 Q13 14 11 18" fill="#54664c"/><path d="M19 18 Q27 12 25 4 Q21 7 19 12 Q18 7 15 8 Q17 14 19 18" fill="#7a8c6f"/><path d="M15 8 Q15 2 15 6" stroke="#54664c" stroke-width="0.8"/>`
-      },
-      {
-        name: 'fern',
-        thumb: `<svg viewBox="0 0 100 100"><path d="M30 70 L70 70 L66 95 L34 95 Z" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="20" ry="3" fill="#54664c"/><path d="M50 70 Q42 50 35 30" stroke="#54664c" stroke-width="2" fill="none"/><path d="M50 70 Q50 45 50 22" stroke="#54664c" stroke-width="2" fill="none"/><path d="M50 70 Q58 50 65 30" stroke="#54664c" stroke-width="2" fill="none"/><path d="M40 50 Q34 50 32 46 M44 40 Q38 40 36 36 M48 30 Q42 30 40 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 50 Q44 50 42 46 M50 40 Q44 40 42 36 M50 30 Q44 30 42 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 50 Q56 50 58 46 M50 40 Q56 40 58 36 M50 30 Q56 30 58 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M60 50 Q66 50 68 46 M56 40 Q62 40 64 36 M52 30 Q58 30 60 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
-        scene: `<path d="M3 26 L27 26 L25 38 L5 38 Z" fill="#7a8c6f" stroke="#54664c" stroke-width="0.7"/><ellipse cx="15" cy="26" rx="11" ry="1.5" fill="#54664c"/><path d="M15 26 Q11 17 7 6" stroke="#54664c" stroke-width="0.8" fill="none"/><path d="M15 26 Q15 14 15 2" stroke="#54664c" stroke-width="0.8" fill="none"/><path d="M15 26 Q19 17 23 6" stroke="#54664c" stroke-width="0.8" fill="none"/><path d="M11 18 Q8 18 7 16 M13 13 Q10 13 9 11 M14 8 Q11 8 10 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/><path d="M15 18 Q12 18 11 16 M15 13 Q12 13 11 11 M15 8 Q12 8 11 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/><path d="M15 18 Q18 18 19 16 M15 13 Q18 13 19 11 M15 8 Q18 8 19 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/><path d="M19 18 Q22 18 23 16 M17 13 Q20 13 21 11 M16 8 Q19 8 20 6" stroke="#7a8c6f" stroke-width="0.9" fill="none" stroke-linecap="round"/>`
-      },
-      {
-        name: 'snake plant',
-        thumb: `<svg viewBox="0 0 100 100"><path d="M30 70 L70 70 L66 95 L34 95 Z" fill="#b88a3e" stroke="#8a6428" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="20" ry="3" fill="#8a6428"/><path d="M44 70 Q42 40 44 14 Q46 12 48 14 Q50 40 48 70 Z" fill="#54664c"/><path d="M50 70 Q52 50 54 24 Q56 22 58 24 Q56 50 54 70 Z" fill="#7a8c6f"/><path d="M40 70 Q36 50 32 28 Q34 26 38 28 Q42 50 42 70 Z" fill="#54664c"/><path d="M44 30 Q46 30 48 30 M44 50 Q46 50 48 50" stroke="#fbf3df" stroke-width="0.4" opacity="0.5"/></svg>`,
-        scene: `<path d="M3 26 L27 26 L25 38 L5 38 Z" fill="#b88a3e" stroke="#8a6428" stroke-width="0.7"/><ellipse cx="15" cy="26" rx="11" ry="1.5" fill="#8a6428"/><path d="M12 26 Q11 16 12 4 Q13 3 14 4 Q15 16 14 26 Z" fill="#54664c"/><path d="M15 26 Q16 18 17 8 Q18 7 19 8 Q18 18 17 26 Z" fill="#7a8c6f"/><path d="M9 26 Q7 18 5 10 Q6 9 8 10 Q10 18 11 26 Z" fill="#54664c"/>`
-      }
+      { name: 'monstera', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30 70 L70 70 L66 95 L34 95 Z" fill="#c0664a" stroke="#9a4a32" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="20" ry="3" fill="#9a4a32"/><path d="M40 50 Q22 40 26 22 Q35 28 38 38 Q42 28 50 30 Q44 42 40 50" fill="#54664c"/><path d="M58 50 Q76 40 72 22 Q63 28 60 38 Q56 28 50 30 Q56 42 58 50" fill="#7a8c6f"/><path d="M50 32 Q50 18 50 28" stroke="#54664c" stroke-width="2"/></svg>' },
+      { name: 'fern', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30 70 L70 70 L66 95 L34 95 Z" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="20" ry="3" fill="#54664c"/><path d="M50 70 Q42 50 35 30" stroke="#54664c" stroke-width="2" fill="none"/><path d="M50 70 Q50 45 50 22" stroke="#54664c" stroke-width="2" fill="none"/><path d="M50 70 Q58 50 65 30" stroke="#54664c" stroke-width="2" fill="none"/><path d="M40 50 Q34 50 32 46 M44 40 Q38 40 36 36 M48 30 Q42 30 40 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 50 Q44 50 42 46 M50 40 Q44 40 42 36 M50 30 Q44 30 42 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 50 Q56 50 58 46 M50 40 Q56 40 58 36 M50 30 Q56 30 58 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M60 50 Q66 50 68 46 M56 40 Q62 40 64 36 M52 30 Q58 30 60 26" stroke="#7a8c6f" stroke-width="2" fill="none" stroke-linecap="round"/></svg>' },
+      { name: 'snake plant', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30 70 L70 70 L66 95 L34 95 Z" fill="#b88a3e" stroke="#8a6428" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="20" ry="3" fill="#8a6428"/><path d="M44 70 Q42 40 44 14 Q46 12 48 14 Q50 40 48 70 Z" fill="#54664c"/><path d="M50 70 Q52 50 54 24 Q56 22 58 24 Q56 50 54 70 Z" fill="#7a8c6f"/><path d="M40 70 Q36 50 32 28 Q34 26 38 28 Q42 50 42 70 Z" fill="#54664c"/></svg>' }
     ]
   },
-
-  // ----------------------- ART -----------------------
   {
     key: 'art',
     slotId: 'slot-art',
@@ -893,21 +936,9 @@ const ROUNDS = [
     factTitle: 'The Masterpiece',
     fact: "Every orangutan nest is a one-night masterpiece — designed, used once, then left for the wind. The most generous interior decorating in nature.",
     options: [
-      {
-        name: 'sunset hills',
-        thumb: `<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="55" fill="#b88a3e" stroke="#8a6428" stroke-width="2"/><rect x="14" y="24" width="72" height="47" fill="#fbf3df"/><rect x="18" y="28" width="64" height="39" fill="#d98e7a"/><circle cx="68" cy="42" r="6" fill="#b88a3e"/><path d="M18 67 L32 50 L42 56 L52 44 L62 52 L82 58 L82 67 Z" fill="#54664c"/><path d="M18 67 L34 56 L44 60 L56 50 L66 56 L82 60 L82 67 Z" fill="#7a8c6f"/><circle cx="14" cy="20" r="1.5" fill="#d4a85e"/><circle cx="86" cy="20" r="1.5" fill="#d4a85e"/><circle cx="14" cy="75" r="1.5" fill="#d4a85e"/><circle cx="86" cy="75" r="1.5" fill="#d4a85e"/></svg>`,
-        scene: `<rect x="0" y="0" width="80" height="55" fill="#b88a3e" stroke="#8a6428" stroke-width="1.5"/><rect x="4" y="4" width="72" height="47" fill="#fbf3df"/><rect x="8" y="8" width="64" height="39" fill="#d98e7a"/><circle cx="58" cy="22" r="6" fill="#b88a3e"/><path d="M8 47 L22 30 L32 36 L42 24 L52 32 L72 38 L72 47 Z" fill="#54664c"/><path d="M8 47 L24 36 L34 40 L46 30 L56 36 L72 40 L72 47 Z" fill="#7a8c6f"/><circle cx="4" cy="4" r="1.5" fill="#d4a85e"/><circle cx="76" cy="4" r="1.5" fill="#d4a85e"/><circle cx="4" cy="51" r="1.5" fill="#d4a85e"/><circle cx="76" cy="51" r="1.5" fill="#d4a85e"/>`
-      },
-      {
-        name: 'abstract',
-        thumb: `<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="55" fill="#3a2820" stroke="#5e3a28" stroke-width="2"/><rect x="14" y="24" width="72" height="47" fill="#fbf3df"/><circle cx="34" cy="42" r="14" fill="#c0664a"/><circle cx="58" cy="52" r="11" fill="#7a8c6f"/><circle cx="70" cy="36" r="6" fill="#b88a3e"/><path d="M18 60 Q40 56 70 64" stroke="#3a2820" stroke-width="1.5" fill="none"/><circle cx="14" cy="20" r="1.5" fill="#d4a85e"/><circle cx="86" cy="20" r="1.5" fill="#d4a85e"/><circle cx="14" cy="75" r="1.5" fill="#d4a85e"/><circle cx="86" cy="75" r="1.5" fill="#d4a85e"/></svg>`,
-        scene: `<rect x="0" y="0" width="80" height="55" fill="#3a2820" stroke="#5e3a28" stroke-width="1.5"/><rect x="4" y="4" width="72" height="47" fill="#fbf3df"/><circle cx="24" cy="22" r="14" fill="#c0664a"/><circle cx="48" cy="32" r="11" fill="#7a8c6f"/><circle cx="60" cy="16" r="6" fill="#b88a3e"/><path d="M8 40 Q30 36 60 44" stroke="#3a2820" stroke-width="0.8" fill="none"/><circle cx="4" cy="4" r="1.5" fill="#d4a85e"/><circle cx="76" cy="4" r="1.5" fill="#d4a85e"/><circle cx="4" cy="51" r="1.5" fill="#d4a85e"/><circle cx="76" cy="51" r="1.5" fill="#d4a85e"/>`
-      },
-      {
-        name: 'botanical',
-        thumb: `<svg viewBox="0 0 100 100"><rect x="10" y="20" width="80" height="55" fill="#7a8c6f" stroke="#54664c" stroke-width="2"/><rect x="14" y="24" width="72" height="47" fill="#fbf3df"/><path d="M50 65 Q50 50 50 30" stroke="#54664c" stroke-width="1.5" fill="none"/><ellipse cx="42" cy="42" rx="9" ry="5" fill="#7a8c6f" transform="rotate(-30 42 42)"/><ellipse cx="58" cy="42" rx="9" ry="5" fill="#7a8c6f" transform="rotate(30 58 42)"/><ellipse cx="40" cy="55" rx="7" ry="4" fill="#54664c" transform="rotate(-40 40 55)"/><ellipse cx="60" cy="55" rx="7" ry="4" fill="#54664c" transform="rotate(40 60 55)"/><circle cx="50" cy="32" r="5" fill="#d98e7a"/><circle cx="50" cy="32" r="2" fill="#b88a3e"/><circle cx="14" cy="20" r="1.5" fill="#d4a85e"/><circle cx="86" cy="20" r="1.5" fill="#d4a85e"/><circle cx="14" cy="75" r="1.5" fill="#d4a85e"/><circle cx="86" cy="75" r="1.5" fill="#d4a85e"/></svg>`,
-        scene: `<rect x="0" y="0" width="80" height="55" fill="#7a8c6f" stroke="#54664c" stroke-width="1.5"/><rect x="4" y="4" width="72" height="47" fill="#fbf3df"/><path d="M40 45 Q40 30 40 12" stroke="#54664c" stroke-width="0.8" fill="none"/><ellipse cx="32" cy="22" rx="9" ry="5" fill="#7a8c6f" transform="rotate(-30 32 22)"/><ellipse cx="48" cy="22" rx="9" ry="5" fill="#7a8c6f" transform="rotate(30 48 22)"/><ellipse cx="30" cy="35" rx="7" ry="4" fill="#54664c" transform="rotate(-40 30 35)"/><ellipse cx="50" cy="35" rx="7" ry="4" fill="#54664c" transform="rotate(40 50 35)"/><circle cx="40" cy="14" r="5" fill="#d98e7a"/><circle cx="40" cy="14" r="2" fill="#b88a3e"/><circle cx="4" cy="4" r="1.5" fill="#d4a85e"/><circle cx="76" cy="4" r="1.5" fill="#d4a85e"/><circle cx="4" cy="51" r="1.5" fill="#d4a85e"/><circle cx="76" cy="51" r="1.5" fill="#d4a85e"/>`
-      }
+      { name: 'sunset hills', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="80" height="55" fill="#b88a3e" stroke="#8a6428" stroke-width="2"/><rect x="14" y="24" width="72" height="47" fill="#fbf3df"/><rect x="18" y="28" width="64" height="39" fill="#d98e7a"/><circle cx="68" cy="42" r="6" fill="#b88a3e"/><path d="M18 67 L32 50 L42 56 L52 44 L62 52 L82 58 L82 67 Z" fill="#54664c"/><path d="M18 67 L34 56 L44 60 L56 50 L66 56 L82 60 L82 67 Z" fill="#7a8c6f"/></svg>' },
+      { name: 'abstract', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="80" height="55" fill="#3a2820" stroke="#5e3a28" stroke-width="2"/><rect x="14" y="24" width="72" height="47" fill="#fbf3df"/><circle cx="34" cy="42" r="14" fill="#c0664a"/><circle cx="58" cy="52" r="11" fill="#7a8c6f"/><circle cx="70" cy="36" r="6" fill="#b88a3e"/><path d="M18 60 Q40 56 70 64" stroke="#3a2820" stroke-width="1.5" fill="none"/></svg>' },
+      { name: 'botanical', thumb: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="80" height="55" fill="#7a8c6f" stroke="#54664c" stroke-width="2"/><rect x="14" y="24" width="72" height="47" fill="#fbf3df"/><path d="M50 65 Q50 50 50 30" stroke="#54664c" stroke-width="1.5" fill="none"/><ellipse cx="42" cy="42" rx="9" ry="5" fill="#7a8c6f" transform="rotate(-30 42 42)"/><ellipse cx="58" cy="42" rx="9" ry="5" fill="#7a8c6f" transform="rotate(30 58 42)"/><ellipse cx="40" cy="55" rx="7" ry="4" fill="#54664c" transform="rotate(-40 40 55)"/><ellipse cx="60" cy="55" rx="7" ry="4" fill="#54664c" transform="rotate(40 60 55)"/><circle cx="50" cy="32" r="5" fill="#d98e7a"/><circle cx="50" cy="32" r="2" fill="#b88a3e"/></svg>' }
     ]
   }
 ];
@@ -915,11 +946,10 @@ const ROUNDS = [
 // =========================================================================
 //   CARD STATE MACHINE
 // =========================================================================
-const stage = document.getElementById('stage');
-const frontLeaf = document.getElementById('frontLeaf');
-const replayBtn = document.getElementById('replayBtn');
-
-let cardState = 'closed-front';
+var stage = document.getElementById('stage');
+var frontLeaf = document.getElementById('frontLeaf');
+var replayBtn = document.getElementById('replayBtn');
+var cardState = 'closed-front';
 
 function openCard() {
   if (cardState !== 'closed-front') return;
@@ -931,7 +961,7 @@ function openCard() {
 function closeAndShowBack() {
   stage.classList.remove('open');
   cardState = 'closing';
-  setTimeout(() => {
+  setTimeout(function() {
     stage.classList.add('back');
     cardState = 'closed-back';
   }, 1200);
@@ -939,165 +969,146 @@ function closeAndShowBack() {
 
 function returnToFront() {
   stage.classList.remove('back');
-  setTimeout(() => {
+  setTimeout(function() {
     cardState = 'closed-front';
     game.reset();
   }, 1100);
 }
 
-frontLeaf.addEventListener('click', () => {
+frontLeaf.addEventListener('click', function() {
   if (cardState === 'closed-front') openCard();
 });
 replayBtn.addEventListener('click', returnToFront);
 
 // =========================================================================
-//   GAME LOGIC
+//   GAME — pure visibility toggling, no DOM construction
 // =========================================================================
-
-// Helper: reliably set SVG content inside an SVG element.
-// Using innerHTML on SVG <g> nodes is flaky across browsers (namespace
-// quirks make injected children render invisibly). DOMParser handles the
-// SVG namespace correctly.
-function setSvgContent(target, svgFragmentString) {
-  const wrapper = '<svg xmlns="http://www.w3.org/2000/svg">' + svgFragmentString + '</svg>';
-  const doc = new DOMParser().parseFromString(wrapper, 'image/svg+xml');
-  // bail if parsing failed
-  if (doc.querySelector('parsererror')) return;
-  while (target.firstChild) target.removeChild(target.firstChild);
-  const sourceRoot = doc.documentElement;
-  while (sourceRoot.firstChild) {
-    target.appendChild(sourceRoot.firstChild);
-  }
-}
-
-const game = {
+var game = {
   currentRound: 0,
-  initialSlotNodes: {}, // store original placeholders (as cloned DOM nodes) for reset
 
-  start() {
-    // capture original slot contents on first run only — store as cloned DOM nodes
-    if (Object.keys(this.initialSlotNodes).length === 0) {
-      ROUNDS.forEach(r => {
-        const el = document.getElementById(r.slotId);
-        if (el) {
-          this.initialSlotNodes[r.slotId] = Array.from(el.children).map(c => c.cloneNode(true));
-        }
-      });
-    }
+  start: function() {
     this.currentRound = 0;
+    this.resetSlots();
     this.renderRound();
   },
 
-  reset() {
-    // restore placeholders by re-appending clones of the original nodes
-    ROUNDS.forEach(r => {
-      const el = document.getElementById(r.slotId);
-      if (el && this.initialSlotNodes[r.slotId]) {
-        while (el.firstChild) el.removeChild(el.firstChild);
-        this.initialSlotNodes[r.slotId].forEach(n => el.appendChild(n.cloneNode(true)));
-        el.classList.remove('active', 'filled');
+  reset: function() {
+    this.start();
+  },
+
+  resetSlots: function() {
+    // Show all placeholders, hide all option groups, clear classes
+    var slots = document.querySelectorAll('.slot');
+    for (var i = 0; i < slots.length; i++) {
+      var slot = slots[i];
+      slot.classList.remove('active', 'filled');
+      var placeholder = slot.querySelector('.slot-placeholder');
+      if (placeholder) placeholder.style.display = '';
+      var groups = slot.querySelectorAll('.opt-group');
+      for (var j = 0; j < groups.length; j++) {
+        groups[j].classList.remove('show');
       }
-    });
-    document.getElementById('fact').className = 'fact empty';
-    document.getElementById('fact').innerHTML = "An orangutan builds a fresh nest every single night — and decorates it.";
-    this.currentRound = 0;
-    this.renderRound();
+    }
+    var fact = document.getElementById('fact');
+    fact.className = 'fact empty';
+    fact.textContent = "An orangutan builds a fresh nest every single night — and decorates it.";
   },
 
-  renderRound() {
+  renderRound: function() {
     // clear active state on all slots
-    ROUNDS.forEach(r => {
-      const el = document.getElementById(r.slotId);
-      if (el) el.classList.remove('active');
-    });
+    var slots = document.querySelectorAll('.slot');
+    for (var i = 0; i < slots.length; i++) {
+      slots[i].classList.remove('active');
+    }
 
     if (this.currentRound >= ROUNDS.length) {
       this.finish();
       return;
     }
 
-    const round = ROUNDS[this.currentRound];
+    var round = ROUNDS[this.currentRound];
 
     // mark current slot active
-    const slotEl = document.getElementById(round.slotId);
+    var slotEl = document.getElementById(round.slotId);
     if (slotEl) slotEl.classList.add('active');
 
     // update prompt
     document.getElementById('promptText').textContent = round.promptText;
 
     // render options
-    const opts = document.getElementById('options');
+    var opts = document.getElementById('options');
     opts.innerHTML = '';
-    round.options.forEach((opt, idx) => {
-      const div = document.createElement('div');
+    var self = this;
+    round.options.forEach(function(opt, idx) {
+      var div = document.createElement('div');
       div.className = 'option';
-      div.innerHTML = `${opt.thumb}<div class="opt-label">${opt.name}</div>`;
-      div.addEventListener('click', () => this.choose(idx));
+      div.innerHTML = opt.thumb + '<div class="opt-label">' + opt.name + '</div>';
+      div.addEventListener('click', function() { self.choose(idx); });
       opts.appendChild(div);
     });
   },
 
-  choose(idx) {
-    const round = ROUNDS[this.currentRound];
-    const opt = round.options[idx];
+  choose: function(idx) {
+    var round = ROUNDS[this.currentRound];
 
-    // place item in scene slot — keep transform, replace inner content
-    const slotEl = document.getElementById(round.slotId);
+    // Show the chosen option in the slot, hide the placeholder
+    var slotEl = document.getElementById(round.slotId);
     if (slotEl) {
-      setSvgContent(slotEl, '<g class="item-in">' + opt.scene + '</g>');
+      var placeholder = slotEl.querySelector('.slot-placeholder');
+      if (placeholder) placeholder.style.display = 'none';
+      var optGroup = slotEl.querySelector('.opt-group[data-idx="' + idx + '"]');
+      if (optGroup) {
+        optGroup.classList.add('show');
+      }
       slotEl.classList.add('filled');
       slotEl.classList.remove('active');
     }
 
-    // show fact
+    // Show fact
     this.showFact(round);
 
-    // small pop on the chosen option
-    const optBtns = document.querySelectorAll('.option');
+    // Pop on chosen option button
+    var optBtns = document.querySelectorAll('.option');
     if (optBtns[idx]) {
       optBtns[idx].style.transform = 'scale(0.9)';
       optBtns[idx].style.opacity = '0.6';
     }
 
-    // advance after a beat
     this.currentRound++;
-    setTimeout(() => this.renderRound(), 1100);
+    var self = this;
+    setTimeout(function() { self.renderRound(); }, 1100);
   },
 
-  showFact(round) {
-    const panel = document.getElementById('fact');
+  showFact: function(round) {
+    var panel = document.getElementById('fact');
     panel.classList.remove('empty');
-    panel.innerHTML = `<span class="name">${round.factTitle}</span>${round.fact}`;
+    panel.innerHTML = '<span class="name">' + round.factTitle + '</span>' + round.fact;
     panel.style.opacity = 0;
-    requestAnimationFrame(() => { panel.style.opacity = 1; });
+    requestAnimationFrame(function() { panel.style.opacity = 1; });
   },
 
-  finish() {
+  finish: function() {
     document.getElementById('promptText').textContent = "There — a beautiful little home for her.";
 
-    const opts = document.getElementById('options');
-    opts.innerHTML = `
-      <div class="done-msg" style="grid-column: 1 / -1;">
-        <p class="check">✦ The room is finished ✦</p>
-        <p class="sub">she's going to love it</p>
-      </div>`;
+    var opts = document.getElementById('options');
+    opts.innerHTML = '<div class="done-msg" style="grid-column: 1 / -1;"><p class="check">\u2726 The room is finished \u2726</p><p class="sub">she\'s going to love it</p></div>';
 
     this.spawnConfetti();
-    setTimeout(() => closeAndShowBack(), 2400);
+    setTimeout(function() { closeAndShowBack(); }, 2400);
   },
 
-  spawnConfetti() {
-    const colors = ['#c0664a', '#7a8c6f', '#b88a3e', '#d98e7a', '#54664c'];
-    for (let i = 0; i < 50; i++) {
-      const c = document.createElement('div');
+  spawnConfetti: function() {
+    var colors = ['#c0664a', '#7a8c6f', '#b88a3e', '#d98e7a', '#54664c'];
+    for (var i = 0; i < 50; i++) {
+      var c = document.createElement('div');
       c.className = 'confetti';
       c.style.left = Math.random() * 100 + 'vw';
       c.style.background = colors[Math.floor(Math.random() * colors.length)];
       c.style.animationDuration = (3 + Math.random() * 3) + 's';
       c.style.animationDelay = Math.random() * 1.2 + 's';
-      c.style.transform = `rotate(${Math.random() * 360}deg)`;
+      c.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
       document.body.appendChild(c);
-      setTimeout(() => c.remove(), 7000);
+      (function(el) { setTimeout(function() { el.remove(); }, 7000); })(c);
     }
   }
 };
