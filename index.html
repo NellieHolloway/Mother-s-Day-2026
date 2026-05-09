@@ -681,9 +681,9 @@
             <!--   Use <br> for line breaks, <br><br> for blank line. -->
             <!-- ════════════════════════════════════════════════════ -->
             <div class="note-text" id="note">
-              Mom — thank you for making every place<br>
-              I've ever lived feel like home.<br><br>
-              I love you. Happy Mother's Day.
+              Mom — thank you for being great<br>
+              I didn't get you an Orangutan but I hope this card will suffice.<br><br>
+              Happy Mother's Day!
             </div>
             <!-- ════════════════════════════════════════════════════ -->
             <!--   ⬆ END OF PERSONAL MESSAGE ⬆                       -->
@@ -953,16 +953,35 @@ replayBtn.addEventListener('click', returnToFront);
 // =========================================================================
 //   GAME LOGIC
 // =========================================================================
+
+// Helper: reliably set SVG content inside an SVG element.
+// Using innerHTML on SVG <g> nodes is flaky across browsers (namespace
+// quirks make injected children render invisibly). DOMParser handles the
+// SVG namespace correctly.
+function setSvgContent(target, svgFragmentString) {
+  const wrapper = '<svg xmlns="http://www.w3.org/2000/svg">' + svgFragmentString + '</svg>';
+  const doc = new DOMParser().parseFromString(wrapper, 'image/svg+xml');
+  // bail if parsing failed
+  if (doc.querySelector('parsererror')) return;
+  while (target.firstChild) target.removeChild(target.firstChild);
+  const sourceRoot = doc.documentElement;
+  while (sourceRoot.firstChild) {
+    target.appendChild(sourceRoot.firstChild);
+  }
+}
+
 const game = {
   currentRound: 0,
-  initialSlotContent: {}, // store original placeholders for reset
+  initialSlotNodes: {}, // store original placeholders (as cloned DOM nodes) for reset
 
   start() {
-    // capture original slot contents on first run only
-    if (Object.keys(this.initialSlotContent).length === 0) {
+    // capture original slot contents on first run only — store as cloned DOM nodes
+    if (Object.keys(this.initialSlotNodes).length === 0) {
       ROUNDS.forEach(r => {
         const el = document.getElementById(r.slotId);
-        if (el) this.initialSlotContent[r.slotId] = el.innerHTML;
+        if (el) {
+          this.initialSlotNodes[r.slotId] = Array.from(el.children).map(c => c.cloneNode(true));
+        }
       });
     }
     this.currentRound = 0;
@@ -970,11 +989,12 @@ const game = {
   },
 
   reset() {
-    // restore placeholders
+    // restore placeholders by re-appending clones of the original nodes
     ROUNDS.forEach(r => {
       const el = document.getElementById(r.slotId);
-      if (el && this.initialSlotContent[r.slotId]) {
-        el.innerHTML = this.initialSlotContent[r.slotId];
+      if (el && this.initialSlotNodes[r.slotId]) {
+        while (el.firstChild) el.removeChild(el.firstChild);
+        this.initialSlotNodes[r.slotId].forEach(n => el.appendChild(n.cloneNode(true)));
         el.classList.remove('active', 'filled');
       }
     });
@@ -1024,7 +1044,7 @@ const game = {
     // place item in scene slot — keep transform, replace inner content
     const slotEl = document.getElementById(round.slotId);
     if (slotEl) {
-      slotEl.innerHTML = `<g class="item-in">${opt.scene}</g>`;
+      setSvgContent(slotEl, '<g class="item-in">' + opt.scene + '</g>');
       slotEl.classList.add('filled');
       slotEl.classList.remove('active');
     }
