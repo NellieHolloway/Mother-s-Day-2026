@@ -91,6 +91,7 @@
     transform-style: preserve-3d;
     transition: transform 1.1s cubic-bezier(0.55, 0.08, 0.25, 1);
     transform: translateX(-25%);
+    pointer-events: none;
   }
   .stage.open .card3d { transform: translateX(0); }
   .stage.back .card3d { transform: translateX(25%) rotateY(180deg); }
@@ -102,6 +103,7 @@
     width: var(--panel-w);
     height: 100%;
     transform-style: preserve-3d;
+    pointer-events: auto;
   }
   .back-leaf { transform: translateZ(-1px); }
 
@@ -110,7 +112,11 @@
     transition: transform 1.4s cubic-bezier(0.5, 0.05, 0.25, 1);
     cursor: pointer;
   }
-  .stage.open .front-leaf { transform: rotateY(-180deg); cursor: default; }
+  .stage.open .front-leaf {
+    transform: rotateY(-180deg);
+    cursor: default;
+    pointer-events: none;
+  }
 
   .face {
     position: absolute;
@@ -253,6 +259,7 @@
       var(--paper);
     padding: 18px 22px 16px 28px;
     display: flex; flex-direction: column;
+    pointer-events: auto;
   }
   .game-header { text-align: center; margin-bottom: 8px; flex-shrink: 0; }
   .game-title {
@@ -341,6 +348,7 @@
     box-shadow: 2px 3px 0 rgba(58,40,32,0.12);
   }
   .option:active { transform: translateY(0); }
+  .option > * { pointer-events: none; }
   .option svg { width: 70%; height: 70%; }
   .option .opt-label {
     font-family: 'Fraunces', serif; font-style: italic;
@@ -772,9 +780,9 @@
             <!--   Use <br> for line breaks, <br><br> for blank line. -->
             <!-- ════════════════════════════════════════════════════ -->
             <div class="note-text" id="note">
-              Mom — thank you for making every place<br>
-              I've ever lived feel like home.<br><br>
-              I love you. Happy Mother's Day.
+              Mom, Congrats on Winning the Best Mother Award <br>
+              You have won it so many years in a row I have lost count.<br><br>
+              Happy Mother's Day!
             </div>
             <!-- ════════════════════════════════════════════════════ -->
             <!--   ⬆ END OF PERSONAL MESSAGE ⬆                       -->
@@ -855,12 +863,9 @@
             will build her home anew each night —<br>
             a careful nest of leaves and vines,<br>
             with every detail set just right.<br><br>
-            She knows what makes a house a home:<br>
-            the careful hand, the gentle eye.<br>
-            <em>You taught me that.</em> In every room<br>
-            of mine, I see the reason why.
+          
           </p>
-          <p class="poem-author">— for you, with love</p>
+          <p class="poem-author">— :)</p>
           <svg class="botanical" viewBox="0 0 220 60" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 30 Q60 10 110 30 Q160 50 210 30" stroke="#7a8c6f" stroke-width="1.5" fill="none"/>
             <g transform="translate(40 22)">
@@ -985,15 +990,38 @@ replayBtn.addEventListener('click', returnToFront);
 // =========================================================================
 var game = {
   currentRound: 0,
+  delegationAttached: false,
 
   start: function() {
     this.currentRound = 0;
     this.resetSlots();
+    this.attachDelegation();
     this.renderRound();
   },
 
   reset: function() {
     this.start();
+  },
+
+  // One click listener on the options container. Fires regardless of which
+  // child was clicked — we read the data-idx off the closest .option ancestor.
+  attachDelegation: function() {
+    if (this.delegationAttached) return;
+    var self = this;
+    var opts = document.getElementById('options');
+    if (!opts) return;
+    opts.addEventListener('click', function(e) {
+      var target = e.target;
+      // walk up to find the .option element
+      while (target && target !== opts && !(target.classList && target.classList.contains('option'))) {
+        target = target.parentNode;
+      }
+      if (!target || target === opts) return;
+      var idx = parseInt(target.getAttribute('data-idx'), 10);
+      if (isNaN(idx)) return;
+      self.choose(idx);
+    });
+    this.delegationAttached = true;
   },
 
   resetSlots: function() {
@@ -1035,15 +1063,14 @@ var game = {
     // update prompt
     document.getElementById('promptText').textContent = round.promptText;
 
-    // render options
+    // render options — just markup, no per-button listeners (delegation handles it)
     var opts = document.getElementById('options');
     opts.innerHTML = '';
-    var self = this;
     round.options.forEach(function(opt, idx) {
       var div = document.createElement('div');
       div.className = 'option';
+      div.setAttribute('data-idx', String(idx));
       div.innerHTML = opt.thumb + '<div class="opt-label">' + opt.name + '</div>';
-      div.addEventListener('click', function() { self.choose(idx); });
       opts.appendChild(div);
     });
   },
